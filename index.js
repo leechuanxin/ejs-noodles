@@ -8,8 +8,12 @@ const FILENAME = './data.json';
 const handleQueryParams = (request, response) => {
   read(FILENAME, (err, data) => {
     // Respond with the name at the index specified in the URL
-    console.log('Recipe:', data.recipes[request.params.index]);
-    response.send(data.recipes[request.params.index]);
+    if (request.params.index >= data.recipes.length) {
+      response.status(404).send('Sorry, we cannot find that!');
+    } else {
+      console.log('Recipe:', data.recipes[request.params.index]);
+      response.send(data.recipes[request.params.index]);
+    }
   });
 };
 
