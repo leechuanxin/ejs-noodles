@@ -17,6 +17,29 @@ const handleQueryParams = (request, response) => {
   });
 };
 
+const handleYieldFilter = (request, response) => {
+  read(FILENAME, (err, data) => {
+    if (Number.isNaN(Number(request.params.yield))) {
+      response.status(400).send('Yield has to be a number!');
+    } else {
+      const matchYield = data.recipes.filter(
+        (recipe) => recipe.yield === Number(request.params.yield),
+      );
+      if (matchYield.length < 1) {
+        response.status(404).send('Sorry, we cannot find that!');
+      } else {
+        response.send(matchYield);
+      }
+    }
+  });
+};
+
+const handle404 = (request, response) => {
+  response.status(404).send('Page not found.');
+};
+
 app.get('/recipe/:index', handleQueryParams);
+app.get('/yield/:yield', handleYieldFilter);
+app.get('*', handle404);
 
 app.listen(PORT);
