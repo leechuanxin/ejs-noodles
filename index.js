@@ -34,12 +34,30 @@ const handleYieldFilter = (request, response) => {
   });
 };
 
+const handleRecipeLabel = (request, response) => {
+  read(FILENAME, (err, data) => {
+    const kebabCaseLabel = request.params.label.toLowerCase();
+    const label = kebabCaseLabel.split('-').join(' ');
+    if (!label || label.trim() === '') {
+      response.status(400).send('Please enter a valid label to search for.');
+    } else {
+      const matched = data.recipes.filter((recipe) => recipe.label.toLowerCase() === label);
+      if (matched.length < 1) {
+        response.status(404).send('Sorry, we cannot find that!');
+      } else {
+        response.send(matched);
+      }
+    }
+  });
+};
+
 const handle404 = (request, response) => {
   response.status(404).send('Page not found.');
 };
 
 app.get('/recipe/:index', handleQueryParams);
 app.get('/yield/:yield', handleYieldFilter);
+app.get('/recipe-label/:label', handleRecipeLabel);
 app.get('*', handle404);
 
 app.listen(PORT);
