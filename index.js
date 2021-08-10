@@ -10,6 +10,43 @@ app.set('view engine', 'ejs');
 // Set public folder for static files
 app.use(express.static('public'));
 
+const handleCategoryParams = (request, response) => {
+  read(FILENAME, (err, data) => {
+    const categoriesObj = {};
+    // retrieve all valid categories
+    data.recipes.forEach((recipe) => {
+      if (recipe.category && !categoriesObj[recipe.category]) {
+        categoriesObj[recipe.category.toLowerCase()] = '';
+      }
+    });
+    // store all valid categories in an array
+    const categoriesArr = Object.keys(categoriesObj);
+    // 404 if category doesn't exist
+    if (categoriesArr.indexOf(request.params.category.toLowerCase()) < 0) {
+      response.status(404).send('Sorry, we cannot find that!');
+    } else {
+      const { recipes } = data;
+      // save indexes of existing data
+      const recipesWithIndexes = recipes.map((recipe, index) => ({
+        ...recipe,
+        index,
+      }));
+      // create recipes obj, with overaching category,
+      // and all recipes matching category
+      // mark those recipes without categories as false
+      const recipesObj = {
+        category: request.params.category.substring(0, 1).toUpperCase()
+        + request.params.category.substring(1).toLowerCase(),
+        recipes: recipesWithIndexes.filter(
+          (el) => ((el.category)
+            ? el.category.toLowerCase() === request.params.category.toLowerCase() : false),
+        ),
+      };
+      response.render('category', recipesObj);
+    }
+  });
+};
+
 const handleQueryParams = (request, response) => {
   read(FILENAME, (err, data) => {
     // Respond with the name at the index specified in the URL
@@ -85,6 +122,7 @@ const handle404 = (request, response) => {
 };
 
 app.get('/', handleIndex);
+app.get('/category/:category', handleCategoryParams);
 app.get('/recipe/:index', handleQueryParams);
 app.get('/yield/:yield', handleYieldFilter);
 app.get('/recipe-label/:label', handleRecipeLabel);
