@@ -64,10 +64,27 @@ const handleRecipeLabel = (request, response) => {
   });
 };
 
+const handleIndex = (request, response) => {
+  read(FILENAME, (err, data) => {
+    const categoriesObj = {};
+    data.recipes.forEach((recipe) => {
+      if (recipe.category && !categoriesObj[recipe.category]) {
+        categoriesObj[recipe.category] = '';
+      }
+    });
+    const categoriesArr = Object.keys(categoriesObj);
+    const categoriesArrObj = {
+      categories: categoriesArr,
+    };
+    response.render('index', categoriesArrObj);
+  });
+};
+
 const handle404 = (request, response) => {
   response.status(404).send('Page not found.');
 };
 
+app.get('/', handleIndex);
 app.get('/recipe/:index', handleQueryParams);
 app.get('/yield/:yield', handleYieldFilter);
 app.get('/recipe-label/:label', handleRecipeLabel);
