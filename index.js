@@ -5,14 +5,27 @@ const PORT = process.argv[2];
 const app = express();
 const FILENAME = './data.json';
 
+// Set view engine
+app.set('view engine', 'ejs');
+// Set public folder for static files
+app.use(express.static('public'));
+
 const handleQueryParams = (request, response) => {
   read(FILENAME, (err, data) => {
     // Respond with the name at the index specified in the URL
     if (request.params.index >= data.recipes.length) {
       response.status(404).send('Sorry, we cannot find that!');
     } else {
-      console.log('Recipe:', data.recipes[request.params.index]);
-      response.send(data.recipes[request.params.index]);
+      const recipe = data.recipes[request.params.index];
+      const ingredients = (recipe && recipe.ingredients) ? recipe.ingredients.split('\n') : [];
+      const recipeObj = {
+        recipe: {
+          ...recipe,
+          ingredients,
+          index: request.params.index,
+        },
+      };
+      response.render('recipe', recipeObj);
     }
   });
 };

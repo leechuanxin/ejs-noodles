@@ -1,0 +1,115 @@
+h1 {
+  text-align: center;
+  font-family: "Courgette", cursive;
+  font-size: 3.5em;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Libre Baskerville", serif;
+  color: #272727;
+}
+
+p,
+li {
+  font-family: "Libre Baskerville", serif;
+  color: #3d3d3d;
+}
+
+p {
+  font-size: 1.25em;
+}
+
+h2 {
+  font-weight: 700;
+  font-variant: small-caps;
+  font-size: 2em;
+  letter-spacing: 2px;
+}
+
+li {
+  margin-bottom: 5px;
+}
+
+.relative {
+  position: relative;
+}
+
+.header-container {
+  border-bottom: 1px solid black;
+  margin-bottom: 2.35em;
+}
+
+.main-images-wrapper {
+  padding-left: 12.5%;
+  padding-right: 12.5%;
+}
+
+@media screen and (min-width: 768px) {
+  .main-images-wrapper {
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+}
+
+.main-images-anchor-wrap {
+  position: relative;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.main-images-anchor-wrap:last-child {
+  margin-bottom: 75px;
+}
+
+.main-images-caption {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.main-images-anchor-wrap:hover .main-images-caption {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.main-images-caption p {
+  font-family: "Courgette", cursive;
+  color: #fff;
+  font-size: 2.5em;
+  text-align: center;
+}
+
+a.default,
+a.default:link,
+a.default:visited,
+a.default:active {
+  text-decoration: none;
+  color: rgb(131, 131, 131);
+}
+
+a.default:hover {
+  text-decoration: underline;
+  color: rgb(165, 165, 165);
+}
+
+.section {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.section:first-child {
+  padding-top: 0;
+}
